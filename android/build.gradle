@@ -37,6 +37,7 @@ dependencies {
 }
 
 cargo {
+    // build native rust code
     module  = "../rust"
     libname = "mobilerust"
     targets = ["arm", "arm64", "x86"]

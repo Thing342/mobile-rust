@@ -10,7 +10,6 @@ object JNI {
     }
 
     private external fun invokeCallbackViaJNI(callback: JNICallback)
-
     fun invokeCallback(callback: (String)->Unit) {
         invokeCallbackViaJNI(object : JNICallback {
             override fun callback(string: String) {
@@ -18,4 +17,8 @@ object JNI {
             }
         })
     }
+
+    private external fun getATCFInfoJNI(atcfId: String): String
+    fun getATCFInfo(atcfId: String): String =  getATCFInfoJNI(atcfId)
+
 }

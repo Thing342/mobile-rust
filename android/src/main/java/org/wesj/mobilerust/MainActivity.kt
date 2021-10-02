@@ -14,9 +14,8 @@ class MainActivity : AppCompatActivity() {
         val button = findViewById<Button>(R.id.hellobutton)
 
         button.setOnClickListener {
-            JNI.invokeCallback {
-                tv.append("\n${it}")
-            }
+            val data = JNI.getATCFInfo("al182021")
+            tv.append("\n${data}")
         }
     }
 }

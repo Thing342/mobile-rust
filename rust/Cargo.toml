@@ -1,0 +1,16 @@
+[package]
+name = "mobilerust"
+version = "0.1.0"
+authors = ["Wes Jordan <wes@wesj.org>"]
+edition = "2018"
+
+[dependencies]
+jni = "0.5.2"
+
+[lib]
+crate_type = ["staticlib", "dylib"]
+
+[features]
+default = ["foo"]
+foo = []
+bar = []

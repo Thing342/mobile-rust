@@ -7,7 +7,10 @@ object JNI {
 
     init {
         System.loadLibrary("mobilerust")
+        setupLogging()
     }
+
+    private external fun setupLogging()
 
     private external fun invokeCallbackViaJNI(callback: JNICallback)
     fun invokeCallback(callback: (String)->Unit) {
@@ -18,7 +21,7 @@ object JNI {
         })
     }
 
-    private external fun getATCFInfoJNI(atcfId: String): String
-    fun getATCFInfo(atcfId: String): String =  getATCFInfoJNI(atcfId)
+    private external fun getATCFInfoJNI(request: CycloneMessageRequest): Any
+    fun getATCFInfo(request: CycloneMessageRequest): CycloneMessage = getATCFInfoJNI(request) as CycloneMessage
 
 }

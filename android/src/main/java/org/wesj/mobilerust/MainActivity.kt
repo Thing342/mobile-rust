@@ -14,8 +14,8 @@ class MainActivity : AppCompatActivity() {
         val button = findViewById<Button>(R.id.hellobutton)
 
         button.setOnClickListener {
-            val data = JNI.getATCFInfo("al182021")
-            tv.append("\n${data}")
+            val data = JNI.getATCFInfo(CycloneMessageRequest(2021, "al", 11))
+            tv.append("\n${data.systemType} ${data.systemName}: ${data.systemIntensityMph} MPH")
         }
     }
 }

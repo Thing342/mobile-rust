@@ -1,4 +1,6 @@
-use serde::{Deserialize,Serialize};
+use std::convert::TryFrom;
+use jni::objects::JObject;
+use serde::{Deserialize, Serialize};
 
 use reqwest::blocking as request;
 
@@ -88,8 +90,9 @@ impl From<serde_xml_rs::Error> for ATCFError {
 
 const ATCF_BACKEND: &str = "https://ftp.nhc.noaa.gov/atcf";
 
-pub fn get_atcf_info(atcf_id: &str) -> Result<CycloneMessage, ATCFError> {
+pub fn get_atcf_info(request: CycloneMessageRequest) -> Result<CycloneMessage, ATCFError> {
     let client = reqwest::blocking::Client::new();
+    let atcf_id = request.atcf_id();
     let url = format!("{}/adv/{}_info.xml", ATCF_BACKEND, atcf_id);
     let body = client.get(&url)
         .send()?
@@ -102,10 +105,41 @@ pub fn get_atcf_info(atcf_id: &str) -> Result<CycloneMessage, ATCFError> {
     //Ok(body)
 }
 
+#[derive(Debug, Serialize, Deserialize)]
+pub struct CycloneMessageRequest {
+    pub year: i32,
+    pub basin: String,
+    pub number: i32
+}
+
+impl CycloneMessageRequest {
+    pub fn atcf_id(&self) -> String {
+        format!("{}{:02}{:04}",self.basin, self.number, self.year)
+    }
+}
+
 mod tests {
+    use crate::atcf::CycloneMessageRequest;
+
     #[test]
     fn test_get() {
-        let data = super::get_atcf_info("al182021").unwrap();
+        let data = super::get_atcf_info(CycloneMessageRequest {
+            year: 2021,
+            basin: "al".to_string(),
+            number: 18
+        }).unwrap();
+
         println!("{:#?}", data)
+    }
+
+    #[test]
+    fn test_req_id() {
+        let case1 = CycloneMessageRequest {
+            year: 2019,
+            basin: "al".to_string(),
+            number: 5
+        };
+
+        println!("{}", case1.atcf_id())
     }
 }

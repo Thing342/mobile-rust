@@ -1,0 +1,4 @@
+[toolchain]
+channel = "1.65.0"
+components = [ "cargo", "rustc", "rust-std" ]
+targets = [ "aarch64-linux-android", "x86_64-linux-android" ]
